@@ -1,1 +1,1 @@
-# jtunnel
+# jtunnel-client
