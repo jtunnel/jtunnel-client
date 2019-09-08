@@ -2,6 +2,7 @@ package cn.forwode.tunnel;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.management.ManagementFactory;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -16,11 +17,12 @@ public abstract class PortClientThread extends Thread {
 	
 	@Override
 	public void run() {
+		String process = ManagementFactory.getRuntimeMXBean().getName();
 		try {
 			Socket clientSocket = new Socket(getConfig().getServerIp(), getConfig().getServerPort());	
 			clientSocket.setSoTimeout(3000);
 			PrintStream out = new PrintStream(clientSocket.getOutputStream());
-			out.println(String.format("R=%s", config.getRemotePort()));
+			out.println(String.format("R=%s=%s", process, config.getRemotePort()));
 			processSocket(clientSocket);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();

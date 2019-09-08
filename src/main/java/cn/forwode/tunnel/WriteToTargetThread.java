@@ -17,7 +17,7 @@ public class WriteToTargetThread extends Thread {
 	private TunnelConfig config;
 
 	public WriteToTargetThread(Socket clientSocket, TunnelConfig config) {
-		super("WriteToTargetThread-" + config.getTargetIp() + "-" + config.getTargetPort());
+		super("WriteToTargetThread-" + config.getTarget().getIp() + "-" + config.getTarget().getPort());
 		this.clientSocket = clientSocket;
 		this.config = config;
 	}
@@ -32,10 +32,9 @@ public class WriteToTargetThread extends Thread {
 				try {
 					data = inputStream.read(buffer);
 					if (data != -1) {
-
 						if (targetSocket == null || targetSocket.isClosed() || targetSocket.isInputShutdown()
 								|| targetSocket.isOutputShutdown()) {
-							targetSocket = new Socket(config.getTargetIp(), config.getTargetPort());
+							targetSocket = new Socket(config.getTarget().getIp(), config.getTarget().getPort());
 							targetSocket.setSoTimeout(3000);
 							new ReadFromTargetThread(clientSocket, targetSocket).start();
 						}
